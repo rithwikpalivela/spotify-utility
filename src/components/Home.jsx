@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Login from "./Login";
+import SearchOptions from "./SearchOptions";
 
 const Home = () => {
     const [token, setToken] = useState('');
@@ -25,6 +26,7 @@ const Home = () => {
     return (
         <>
             <h1>Spotify React</h1>
+            {!!token && <SearchOptions tokenProp={token}/>}
             <Login tokenProp={token} logoutFunc={logout}/>
         </>
     );
