@@ -1,13 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import SearchResults from "./SearchResults";
-import Dropdown from "react-dropdown";
+import PlaylistList from "./PlaylistList";
+import PlaylistModal from "./PlaylistModal";
 import "react-dropdown/style.css";
 
 const SearchOptions = ({tokenProp}) => {
     const [playlistResults, setPlaylistResults] = useState();
-    const [trackResults, setTrackResults] = useState();
-    const [options, setOptions] = useState();
+    const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+    const [playlistModalDetails, setPlaylistModalDetails] = useState();
 
     const handlePlaylistSearch = async (e) => {
         e.preventDefault();
@@ -19,32 +19,24 @@ const SearchOptions = ({tokenProp}) => {
         });
 
         setPlaylistResults(data.items);
-
-        const options = data.items.map((result) => {
-            return {value: result.id, label: result.name};
-        });
-        setOptions(options);
     }
 
-    const handleTrackSearch = async (e) => {
-        const {data} = await axios.get(`https://api.spotify.com/v1/playlists/${e.value}/tracks`, {
-            headers: {
-                Authorization: `Bearer ${tokenProp}`
-            },
-            params: {
-                fields: "items(track(name,id,artists(name)))"
-            }
-        });
+    const viewPlaylist = (playlist) => {
+        setPlaylistModalDetails(playlist);
+        (setShowPlaylistModal(true));
+    }
 
-        setTrackResults(data.items.map((item) => item.track));
+    const hidePlaylist = () => {
+        setPlaylistModalDetails();
+        setShowPlaylistModal(false);
     }
 
     return (
         <>
+            {showPlaylistModal && <div onClick={hidePlaylist} style={{position: "fixed", top: "0", left: "0", width: "100%", height: "100%", background: "rgba(0,0,0,0.6)"}}></div>}
             <button onClick={handlePlaylistSearch}>Retrieve My Playlists</button>
-            {!!playlistResults && <SearchResults results={playlistResults} />}
-            {!!playlistResults && <Dropdown options={options} onChange={handleTrackSearch} value={options[0]} placeholder="Select a playlist to transfer:" />}
-            {!!trackResults && <SearchResults results={trackResults} />}
+            {!!playlistResults && <PlaylistList results={playlistResults} viewPlaylist={viewPlaylist} />}
+            {showPlaylistModal && <PlaylistModal playlist={playlistModalDetails} hidePlaylist={hidePlaylist} token={tokenProp} />}
         </>
     );
 }
