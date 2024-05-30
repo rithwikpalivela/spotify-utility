@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-// import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 
 const PlaylistModal = ({ playlist, hidePlaylist, token }) => {
@@ -21,7 +20,8 @@ const PlaylistModal = ({ playlist, hidePlaylist, token }) => {
         await getPlaylistTracks(playlist.id)
             .then(async () => await getUserId())
             .then(async (data) => await createPlaylist(data.id))
-            .then(async (playlist) => await addTracks(playlist.id));
+            .then(async (playlist) => await addTracks(playlist.id))
+            .then(alert("Your playlist has been transferred!"));
     }
 
     const getUserId = async () => {
