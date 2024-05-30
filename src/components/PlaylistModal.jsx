@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+// import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Button from "react-bootstrap/Button";
 
 const PlaylistModal = ({ playlist, hidePlaylist, token }) => {
     const [willTransfer, setWillTransfer] = useState(false);
@@ -99,28 +101,35 @@ const PlaylistModal = ({ playlist, hidePlaylist, token }) => {
                 <button onClick={hidePlaylist} style={{color: "white", backgroundColor: "gray", position: "absolute", top: "-8px", right: "-8px", fontSize: "15px", borderRadius: "50%", border: "2px solid black"}}>
                     &times;
                 </button>
-                <h1>{playlist.name}</h1>
-                {willTransfer && <figure>
-                    <img src={playlist.images[0].url} alt="Playlist Cover" width="40%" height="40%"></img>
-                </figure>}
-                {!willTransfer && <figure>
+                {!willTransfer && <h1 style={{marginTop: "10px"}}>{playlist.name}</h1>}
+                {willTransfer && <h2 style={{marginTop: "10px"}}>{playlist.name}</h2>}
+                {!willTransfer && <figure style={{marginTop: "10px"}}>
                     <img src={playlist.images[0].url} alt="Playlist Cover" width="50%" height="50%"></img>
                 </figure>}
+                {willTransfer && <figure style={{marginTop: "5px"}}>
+                    <img src={playlist.images[0].url} alt="Playlist Cover" width="25%" height="25%"></img>
+                </figure>}
                 <p>{playlist.description}</p>
-                <h3>Number of songs: {playlist.tracks.total}</h3>
+                <h5>Number of songs: {playlist.tracks.total}</h5>
                 {!willTransfer && <button onClick={beginTransfer}>Initiate Transfer</button>}
-                {willTransfer && <div>
-                    <h2>New Playlist Details</h2>
-                    <form onSubmit={handleTransfer}>
-                        <label>
-                            Name:
-                            <input type="text" onChange={(e) => newPlaylistName = e.target.value}></input>
-                        </label>
-                        <label>
-                            Description:
-                            <input type="text" onChange={(e) => newPlaylistDesc = e.target.value}></input>
-                        </label>
-                        <button type="submit">Transfer</button>
+                {willTransfer && <div style={{marginTop: "3%"}}>
+                    <h3>New Playlist Details</h3>
+                    <form onSubmit={handleTransfer} style={{marginTop: "3%"}}>
+                        <div className="flexbox-container" style={{display: "flex", flexDirection: "row", justifyContent: "space-evenly"}}>
+                            <div className="flex-item">
+                                <label style={{display: "flex", flexDirection: "column"}}>
+                                    Name:
+                                    <input style={{display: "flex", flexDirection: "column"}} type="text" onChange={(e) => newPlaylistName = e.target.value}></input>
+                                </label>
+                            </div>
+                            <div className="flex-item">
+                                <label style={{display: "flex", flexDirection: "column"}}>
+                                    Description:
+                                    <textarea style={{display: "flex", flexDirection: "column"}} onChange={(e) => newPlaylistDesc = e.target.value}></textarea>
+                                </label>
+                            </div>
+                        </div>
+                        <Button variant="primary" type="submit" style={{marginTop: "5%", width: "50%"}}>Transfer</Button>
                     </form>
                 </div>}
             </div>
