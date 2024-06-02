@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Login from "./Login";
 import SearchOptions from "./SearchOptions";
+import Header from "./Header";
 
 const Home = () => {
     const [token, setToken] = useState('');
@@ -25,9 +25,8 @@ const Home = () => {
 
     return (
         <>
-            <h1>Spotify React</h1>
-            {!!token && <SearchOptions tokenProp={token}/>}
-            <Login tokenProp={token} logoutFunc={logout}/>
+            <div style={{width: "100%", backgroundColor: "green", zIndex: "100"}}><Header token={token} logout={logout}/></div>
+            {!!token && <div><br /><br /><br /><SearchOptions tokenProp={token}/></div>}
         </>
     );
 }
